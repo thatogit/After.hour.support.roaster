@@ -33,6 +33,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<ILogging, LoggingV2>();
 
+builder.Services.AddTransient<SupportRoasterHostedService>();
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngularOrigins",
@@ -61,5 +63,11 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+var servicePrvider = builder.Services.BuildServiceProvider();
+
+var supportRoasterService = servicePrvider.GetService<SupportRoasterHostedService>();
+
+supportRoasterService.Start();
 
 app.Run();
